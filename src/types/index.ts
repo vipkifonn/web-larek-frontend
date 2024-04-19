@@ -52,3 +52,12 @@ export interface ICard extends IProduct {
 	index?: string;
 	buttonTitle?: string;
 }
+
+//состояние приложения
+export interface IAppState {
+	catalog: IProduct[];
+	basket: IProduct[];
+	preview: string | null;
+	contact: IDeliveryForm | null;
+	order: IOrder | null;
+}
