@@ -200,5 +200,5 @@ export interface IAppState {
 
 Взаимодействия внутри приложения происходят через события. Модели инициализируют события, слушатели событий в основном коде выполняют передачу данных компонентам отображения, а также вычислениями между этой передачей, и еще они меняют значения в моделях.
 ## Диаграмма
-(https://github.com/vipkifonn/web-larek-frontend/blob/main/README.md)
+(https://github.com/vipkifonn/web-larek-frontend/blob/main/diagram.png)
  
