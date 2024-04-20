@@ -44,53 +44,61 @@ yarn build
 ## Базовый код
 ### Класс Api
 Защищенный класс отвечает за работу API. Имеет конструктор, методы get и post, обработчик ответа от сервера.
+constructor(baseUrl: string, options: RequestInit = {})
+- #handleResponse(response: Response): Promise<object> - обработчик ответа
+- get(uri: string) - метод запроса данных
+- post(uri: string, data: object, method: ApiPostMethods = 'POST') - метод отправки данных
 
 ### Класс Component
 Абстрактный класс. Используется для создания элементов интерфейса.
 Содержит конструктор и ряд методов для универсальной работы с DOM -компонентами: 
-- toggleClass - переключается класс,
-- #setText - устанавливает текстовое содержимое,
-- #setImage - устанавливает изображения и альтернативный текст,
-- setDisabled - изменяет статус блокировки,
-- setHidden - скрывает элемент,
-- setVisible - отображает элемент,
-- render - возвращает корневой DOM-элемент.
+#constructor(protected readonly container: HTMLElement)
+- toggleClass (element: HTMLElement, className: string, force?: boolean) - переключается класс,
+- #setText (element: HTMLElement, value: unknown) - устанавливает текстовое содержимое,
+- #setImage (element: HTMLImageElement, src: string, alt?: string) - устанавливает изображения и альтернативный текст,
+- setDisabled (element: HTMLElement, state: boolean) - изменяет статус блокировки,
+- setHidden (element: HTMLElement) - скрывает элемент,
+- setVisible (element: HTMLElement) - отображает элемент,
+- render (data?: Partial<T>): HTMLElement  - возвращает корневой DOM-элемент.
 
 ### EventEmitter
 Класс - брокер событий. Содержит конструктор, а также методы:
-- on - устанавливает обработчик событий;
-- off - снимает обработчик событий;
-- emit - инициирует событие с данными;
-- onAll - слушает все события;
+constructor()
+- on <T extends object>(eventName: EventName, callback: (event: T) => void) - устанавливает обработчик событий;
+- off (eventName: EventName, callback: Subscriber) - снимает обработчик событий;
+- emit <T extends object>(eventName: string, data?: T) - инициирует событие с данными;
+- onAll (callback: (event: EmitterEvent) => void) - слушает все события;
 - offAll - сбрасывает все обработчики;
-- trigger - триггер, генерирующий событие при вызове;
+- trigger <T extends object>(eventName: string, context?: Partial<T>) - триггер, генерирующий событие при вызове;
 
 ### Класс Model
 Абстрактный класс. Используется для создания модельных данных. Содержит конструктор и метод, сообщающий, об изменениях.
+constructor(data: Partial<T>, protected events: IEvents)
+- emitChanges(event: string, payload?: object) - уведомляет об изменениях
 
 ## Код моделей данных
 ### Класс AppData 
 Класс отвечает за работу с данными, обрабатывает дейсткия пользователя.Наследует класс Model для отслеживания изменений. Содержит конструктор и методы: 
 
 constructor(data, events )
-- Clear busket - отчищает иконку корзины
-- ClearOrder - отчищает заказ
-- updateBusket - обновление иконки корзины
-- setPreview -открытие карточки продукта
-- AddtoBusket -добавление в корзину карточки продукта
-- RemovefromBusket - удаление из корзины карточки продукта
-- setCatalog - меняет список покупок
-- setPaymentMethod - меняет метод оплаты,
-- setForms - проверка заполнености форм
-- Validate - проверка валидации
-- getTotal - итоговый счет выдает
+- Clear busket() - отчищает иконку корзины
+- ClearOrder() - отчищает заказ
+- updateBusket() - обновление иконки корзины
+- setPreview(item: IProduct) -открытие карточки продукта
+- AddtoBusket(item: IProduct) -добавление в корзину карточки продукта
+- RemovefromBusket(item: IProduct) - удаление из корзины карточки продукта
+- setCatalog(items: IProduct[]) - меняет список покупок
+- setPaymentMethod(method: string): void - меняет метод оплаты,
+- setForms(field: keyof IDeliveryForm, value: string) - проверка заполнености форм
+- Validate() - проверка валидации
+- getTotal(): number - итоговый счет выдает
 ### Класс Form
 Класс для работы с формами. Наследуется от Component<T>
 Содержит конструктор и методы, отвечающие за работу с валидностью и ошибками при заполнении форм.
 constructor(container: HTMLElement,events: IEvents)
 
-+ set valid
-+ set error
++ set valid(value: boolean) - обрабатывает валидность
++ set error (value: string) - обрабатывает ошибку
 
 
 ## Код отображения
@@ -98,38 +106,38 @@ constructor(container: HTMLElement,events: IEvents)
 Класс отвечающий за тображение страницы. Наследуется от Component<T> Имеет конструктор и методы
 constructor (container: HTMLElement,events: IEvents) 
 
-- set card catalog - отображает каталог товаров
-- set count - отображает счеткик
+- set card catalog (items: HTMLElement[]) - отображает каталог товаров
+- set count (value: number) - отображает счеткик
 
 ### Класс Card
 Класс отвечающий за отображение карточки продукта.Наследуется от Component<ICard> Имеет конструктор и методы:
 constructor (container: HTMLElement,events)
 
-- set/get id - управляет индификатором карточки.
-- set/get title - управляет названием товара.
-- set/get category - управляет категорией и ее цветом.
-- set/get price - управляет ценой товара.
-- set image - устанавливает изображение товара.
-- set description - устанавливает описание товара.
+- set/get id (value: string) - управляет индификатором карточки.
+- set/get title(value: string) - управляет названием товара.
+- set/get category (value: string) - управляет категорией и ее цветом.
+- set/get price (value: number) - управляет ценой товара.
+- set image (value: string) - устанавливает изображение товара.
+- set description(value: string | string[]) - устанавливает описание товара.
 
 ### Класс Busket
 Класс отвечающий за отображение корзины.Наследуется от Component<IBusket> Имеет конструктор и методы:
 constructor (container: HTMLElement,events: IEvents) 
-- set items - устанавливает товары в корзине.
-- set total - устанавливает общую стоимость товаров.
+- set items (items: HTMLElement[]) - устанавливает товары в корзине.
+- set total (total: number) - устанавливает общую стоимость товаров.
 
 ### Класс Modal 
 Класс отвечающий за отображение модального окна.Наследуется от Component<T> Имеет конструктор и методы:
 constructor (container: HTMLElement,events: IEvents)
-- content - собирает содержимое модального окна;
-- open - открывает модальное окно;
-- close - закрывает модальное окно;
+- content(value: HTMLElement) - собирает содержимое модального окна;
+- open() - открывает модальное окно;
+- close() - закрывает модальное окно;
 
 ### Класс Succsess 
 Класс отвечающий за отображение успешного заказа.Наследуется от Component<T> Имеет конструктор и методы:
 constructor (container: HTMLElement,events: succsess)
 
--settotalcount - отображает финальный счет списания
+-settotalcount (value: string)- отображает финальный счет списания
 
 ## Типы
 //тип для продукта
@@ -200,5 +208,5 @@ export interface IAppState {
 
 Взаимодействия внутри приложения происходят через события. Модели инициализируют события, слушатели событий в основном коде выполняют передачу данных компонентам отображения, а также вычислениями между этой передачей, и еще они меняют значения в моделях.
 ## Диаграмма
-(https://github.com/vipkifonn/web-larek-frontend/blob/main/diagram.png)
+https://github.com/vipkifonn/web-larek-frontend/blob/main/diagram.png
  
