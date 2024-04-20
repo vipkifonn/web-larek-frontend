@@ -11,7 +11,7 @@
 - src/pages/index.html — HTML-файл главной страницы
 - src/types/index.ts — файл с типами
 - src/index.ts — точка входа приложения
-- src/styles/styles.scss — корневой файл стилей
+- srss/styles/styles.scss — корневой файл стилей
 - src/utils/constants.ts — файл с константами
 - src/utils/utils.ts — файл с утилитами
 
@@ -49,7 +49,7 @@ constructor(baseUrl: string, options: RequestInit = {})
 - get(uri: string) - метод запроса данных
 - post(uri: string, data: object, method: ApiPostMethods = 'POST') - метод отправки данных
 
-### Класс Component
+### Класс Component<T>
 Абстрактный класс. Используется для создания элементов интерфейса.
 Содержит конструктор и ряд методов для универсальной работы с DOM -компонентами: 
 #constructor(protected readonly container: HTMLElement)
@@ -120,8 +120,8 @@ constructor (container: HTMLElement,events)
 - set image (value: string) - устанавливает изображение товара.
 - set description(value: string | string[]) - устанавливает описание товара.
 
-### Класс Busket
-Класс отвечающий за отображение корзины.Наследуется от Component<IBusket> Имеет конструктор и методы:
+### Класс Basket
+Класс отвечающий за отображение корзины.Наследуется от Component<IBasket> Имеет конструктор и методы:
 constructor (container: HTMLElement,events: IEvents) 
 - set items (items: HTMLElement[]) - устанавливает товары в корзине.
 - set total (total: number) - устанавливает общую стоимость товаров.
