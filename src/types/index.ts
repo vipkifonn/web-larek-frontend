@@ -4,10 +4,11 @@ export type ProductCategory =
 	| 'другое'
 	| 'дополнительное'
 	| 'кнопка'
-	| 'хард-скил';
+	| 'хард-скил'
+  | string;
 
 //тип для оплаты
-export type PaymentMethod = 'онлайн' | 'при получении';
+export type PaymentMethod = 'онлайн' | 'при получении' | string;
 
 //интерфейс для товаров
 export interface IProduct {
@@ -60,4 +61,11 @@ export interface IAppState {
 	preview: string | null;
 	contact: IDeliveryForm | null;
 	order: IOrder | null;
+}
+//ошибки в формах
+export type FormErrors = Partial<Record<keyof IOrder, string>>;
+
+//действия передаваемые в конструктор
+export interface IActions {
+	onClick: (event: MouseEvent) => void;
 }

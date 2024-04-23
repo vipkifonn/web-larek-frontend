@@ -11,7 +11,7 @@
 - src/pages/index.html — HTML-файл главной страницы
 - src/types/index.ts — файл с типами
 - src/index.ts — точка входа приложения
-- srss/styles/styles.scss — корневой файл стилей
+- src/scss/styles.scss — корневой файл стилей
 - src/utils/constants.ts — файл с константами
 - src/utils/utils.ts — файл с утилитами
 
@@ -78,7 +78,7 @@ constructor(data: Partial<T>, protected events: IEvents)
 
 ## Код моделей данных
 ### Класс AppData 
-Класс отвечает за работу с данными, обрабатывает дейсткия пользователя.Наследует класс Model для отслеживания изменений. Содержит конструктор и методы: 
+Класс отвечает за работу с данными, обрабатывает дейсткия пользователя.Наследует класс Model<IProduct> для отслеживания изменений. Содержит конструктор и методы: 
 
 constructor(data, events )
 - Clear busket() - отчищает иконку корзины
@@ -89,29 +89,48 @@ constructor(data, events )
 - RemovefromBusket(item: IProduct) - удаление из корзины карточки продукта
 - setCatalog(items: IProduct[]) - меняет список покупок
 - setPaymentMethod(method: string): void - меняет метод оплаты,
-- setForms(field: keyof IDeliveryForm, value: string) - проверка заполнености форм
-- Validate() - проверка валидации
+- setDeliveryForm(field: keyof IDeliveryForm, value: string) - проверяет заполненность форм адреса
+- setContactForm(field: keyof IDeliveryForm, value: string) - проверяет заполненность форм контактов;
+- validateDelivery - проверяет валидацию форм адреса
+- validateContact - проверяет валидацию форм контактов;
 - getTotal(): number - итоговый счет выдает
-### Класс Form
-Класс для работы с формами. Наследуется от Component<T>
+
+### Класс Form<T>
+Класс для работы с формами. Наследуется от Component<IFormState>
 Содержит конструктор и методы, отвечающие за работу с валидностью и ошибками при заполнении форм.
 constructor(container: HTMLElement,events: IEvents)
 
-+ set valid(value: boolean) - обрабатывает валидность
-+ set error (value: string) - обрабатывает ошибку
+- set valid(value: boolean) - обрабатывает валидность
+- set error (value: string) - обрабатывает ошибку
+- render(state: Partial<T> & IFormState) - рендер страницы
 
+### Класс DeliveryForm 
+Класс отвечает за работу c данными адреса заказчика.Наследуется от Form<IDeliveryForm>. Может использоваться для отображения. Содержит конструктор и методы, отвечающие за добавление и изменение данных заказчика
+
+constructor(container: HTMLFormElement, events: IEvents, actions?: IActions)
+-	toggleButtons(target: HTMLElement) - добавляет класс для выбранного способа оплаты
+- set address(value: string) - добавляет данные адреса
+
+### Класс ContactForm
+Класс так-же отвечает за работу c данными контактов заказчика.Наследуется от Form<IDeliveryForm>. Может использоваться для отображения. Содержат конструктор и методы, отвечающие за добавление и изменение данных заказчика
+
+constructor(container: HTMLFormElement, events: IEvents)
+- set phone(value: string) - добавляет номер телефона
+- set email(value: string) - добавляет электронную почту
 
 ## Код отображения
 ### Класс Page
-Класс отвечающий за тображение страницы. Наследуется от Component<T> Имеет конструктор и методы
-constructor (container: HTMLElement,events: IEvents) 
+Класс отвечающий за тображение страницы. Наследуется от Component<IPage> Имеет конструктор и методы
+constructor (container: HTMLElement,#events: IEvents) 
 
 - set card catalog (items: HTMLElement[]) - отображает каталог товаров
 - set count (value: number) - отображает счеткик
+- set locked (value: boolean) - переключает блокировку интерфейса;
+
 
 ### Класс Card
 Класс отвечающий за отображение карточки продукта.Наследуется от Component<ICard> Имеет конструктор и методы:
-constructor (container: HTMLElement,events)
+constructor (container: HTMLElement,actions?: IActions)
 
 - set/get id (value: string) - управляет индификатором карточки.
 - set/get title(value: string) - управляет названием товара.
@@ -119,23 +138,26 @@ constructor (container: HTMLElement,events)
 - set/get price (value: number) - управляет ценой товара.
 - set image (value: string) - устанавливает изображение товара.
 - set description(value: string | string[]) - устанавливает описание товара.
+- set buttonTitle(value: string) -  устанавливает текст кнопки.
 
 ### Класс Basket
 Класс отвечающий за отображение корзины.Наследуется от Component<IBasket> Имеет конструктор и методы:
-constructor (container: HTMLElement,events: IEvents) 
+constructor (container: HTMLElement,#events: IEvents)
+- toggleButton(isDisabled: boolean) - меняет доступ кнопки.
 - set items (items: HTMLElement[]) - устанавливает товары в корзине.
 - set total (total: number) - устанавливает общую стоимость товаров.
 
 ### Класс Modal 
-Класс отвечающий за отображение модального окна.Наследуется от Component<T> Имеет конструктор и методы:
-constructor (container: HTMLElement,events: IEvents)
+Класс отвечающий за отображение модального окна.Наследуется от Component<IModalData> Имеет конструктор и методы:
+constructor (container: HTMLElement,#events: IEvents)
 - content(value: HTMLElement) - собирает содержимое модального окна;
 - open() - открывает модальное окно;
 - close() - закрывает модальное окно;
+- render(data: IModalData): HTMLElement - создает и открывает модальное окно с собранным содержимым
 
 ### Класс Succsess 
-Класс отвечающий за отображение успешного заказа.Наследуется от Component<T> Имеет конструктор и методы:
-constructor (container: HTMLElement,events: succsess)
+Класс отвечающий за отображение успешного заказа.Наследуется от Component<ISuccess> Имеет конструктор и методы:
+constructor (container: HTMLElement, actions: ISuccessActions)
 
 -settotalcount (value: string)- отображает финальный счет списания
 
@@ -146,10 +168,11 @@ export type ProductCategory =
 	| 'другое'
 	| 'дополнительное'
 	| 'кнопка'
-	| 'хард-скил';
+	| 'хард-скил'
+  | string;
 
 //тип для оплаты
-export type PaymentMethod = 'онлайн' | 'при получении';
+export type PaymentMethod = 'онлайн' | 'при получении' | string;
 
 //интерфейс для товаров
 export interface IProduct {
@@ -203,10 +226,18 @@ export interface IAppState {
 	contact: IDeliveryForm | null;
 	order: IOrder | null;
 }
+//ошибки в формах
+export type FormErrors = Partial<Record<keyof IOrder, string>>;
+
+//действия передаваемые в конструктор
+export interface IActions {
+	onClick: (event: MouseEvent) => void;
+}
 
 ## Об архитектуре 
 
 Взаимодействия внутри приложения происходят через события. Модели инициализируют события, слушатели событий в основном коде выполняют передачу данных компонентам отображения, а также вычислениями между этой передачей, и еще они меняют значения в моделях.
 ## Диаграмма
-https://github.com/vipkifonn/web-larek-frontend/blob/main/diagram.png
+
+![Диаграмма](./diagram.png)
  
