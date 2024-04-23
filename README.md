@@ -162,6 +162,7 @@ constructor (container: HTMLElement, actions: ISuccessActions)
 -settotalcount (value: string)- отображает финальный счет списания
 
 ## Типы
+```
 //тип для продукта
 export type ProductCategory =
 	| 'софт-скил'
@@ -233,7 +234,7 @@ export type FormErrors = Partial<Record<keyof IOrder, string>>;
 export interface IActions {
 	onClick: (event: MouseEvent) => void;
 }
-
+```
 ## Об архитектуре 
 
 Взаимодействия внутри приложения происходят через события. Модели инициализируют события, слушатели событий в основном коде выполняют передачу данных компонентам отображения, а также вычислениями между этой передачей, и еще они меняют значения в моделях.
