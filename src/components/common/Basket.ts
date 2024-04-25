@@ -22,11 +22,11 @@ export class Basket extends Component<IBasket> {
 		}
 
 		this.items = [];
-		this._button.disabled = true;
+		this.setDisabled(this._button,true);
 	}
 
 	toggleButton(isDisabled: boolean) {
-		this._button.disabled = isDisabled;
+		this.setDisabled(this._button,isDisabled);
 	}
 
 	set items(items: HTMLElement[]) {

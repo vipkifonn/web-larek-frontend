@@ -35,7 +35,7 @@ export class Card extends Component<ICard> {
   disablePriceButton(value: number | null) {
     if (!value) {
       if (this._button) {
-        this._button.disabled = true;
+        this.setDisabled(this._button,true);
       }
     }
   }
@@ -78,8 +78,8 @@ export class Card extends Component<ICard> {
 
     const baseClass = this._category.classList[0];
     this._category.className = '';
-    this._category.classList.add(`${baseClass}`);
-    this._category.classList.add(`${baseClass}${this.categoryMap[value]}`);
+    this.toggleClass(this._category,`${baseClass}`);
+    this.toggleClass(this._category,`${baseClass}${this.categoryMap[value]}`)
   }
 
   get category(): string {
@@ -87,7 +87,7 @@ export class Card extends Component<ICard> {
   }
 
   set index(value: string) {
-    this._index.textContent = value;
+    this.setText(this._index,value)
   }
 
   get index(): string {
@@ -104,7 +104,7 @@ export class Card extends Component<ICard> {
 
   set buttonTitle(value: string) {
     if (this._button) {
-      this._button.textContent = value;
+      this.setText(this._button,value);
     }
   }
 }
